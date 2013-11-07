@@ -111,4 +111,4 @@ If you ever use it in a production site, feel free to let me know the URL and I 
 		==> Set !important on the style or let the CSS override do its job
 	*********************/
 
-*__Note:__ English not being my native language, feel free to correct any misstake*
+*__Note:__ English not being my native language, feel free to correct any mistake*
