@@ -34,6 +34,10 @@ Unlimited amount of query point can be set. In this example, if the window width
 
 One of the best ways to use this plugin is to set a responsive width on the `body` and then use only relative font size. This is the best practice and has a huge performance gain.
 
+###Example
+
+Check out this [jsFiddle](http://jsfiddle.net/tfT9L/embedded/result/) to see it in action!
+
 ##List of all methods and options
 
     //Here a list of all options
@@ -103,4 +107,6 @@ One of the best ways to use this plugin is to set a responsive width on the `bod
 	cssFile.isImportant(value)
 		==> value = (true|false) is the style overriding with !important
 		==> Set !important on the style or let the CSS override do its job
-		*********************/
+	*********************/
+
+*__Note:__ English not being my native language, feel free to correct any misstake*
