@@ -36,7 +36,7 @@ One of the best ways to use this plugin is to set a responsive width on the `bod
 
 ###Example
 
-Check out this [jsFiddle](http://jsfiddle.net/tfT9L/1/embedded/result/) to see it in action!
+Check out this [jsFiddle](http://jsfiddle.net/tfT9L/2/embedded/result/) to see it in action!
 
 If you ever use it in a production site, feel free to let me know the URL and I may feature your site on this page.
 
