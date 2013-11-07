@@ -47,7 +47,7 @@ Check out this [jsFiddle](http://jsfiddle.net/tfT9L/embedded/result/) to see it 
 	rf.value 			= 'px'; 	==> (string : Every CSS font-size proportie value) The size value the font will have.
 	rf.throttle 		= false; 	==> (true|false) Performance option: calculate on window resize or X ms after the window resize is done
 	rf.throttleDelay 	= 500;		==> (integer) [if throttle == true] Time before calculating the new size after window resize
-	rf.override 		= false;	==> (true|false) If true, will add !important, else It will be base on CSS override
+	rf.override 		= false;	==> (true|false) If true, will add !important, else It will be based on CSS override
 
 	Options can be changed manually like that:
 
