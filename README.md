@@ -3,11 +3,6 @@ Responsive-Font
 
 Calculate font-size depending on the window size.
 
-Responsive-Font
-===============
-
-Calculate font-size depending on the window size.
-
 ##What it does
 
 Responsive font is a common problem for web designer.  Having the font size to adapt the screen without using multiple media queries is nearly impossible, not without JavaScript. This plugin will adapt the font based on the different points/sizes you will set. 
