@@ -8,7 +8,7 @@ Calculate font-size depending on the window size.
 Responsive font is a common problem for web designer.  Having the font size to adapt the screen without using multiple media queries is nearly impossible, not without JavaScript. This plugin will adapt the font based on the different points/sizes you will set. 
 
 ##How to use
-You will surely need to link the `rfont.js` or `rfont.min.js` file in the head of the document. No other libraries are needed.
+You will surely need to link the `rfont-version.js` or `rfont-version.min.js` file in the head of the document. No other libraries are needed.
 
 You don’t need to wait for the DOM to be ready and it this plugin can be overridden by your CSS files.
 ###First step
