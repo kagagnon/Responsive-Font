@@ -1,5 +1,5 @@
 /*!
- * Responsive Font - version 1.0 2013-11-06
+ * Responsive Font - version 1.1 2014-02-07
  * Follow me on twitter : https://twitter.com/gagnon_KA
  *
  * Copyright (c) 2013 Karl-André Gagnon
