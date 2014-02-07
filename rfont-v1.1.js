@@ -3,9 +3,9 @@
  * Follow me on twitter : https://twitter.com/gagnon_KA
  *
  * Copyright (c) 2013 Karl-André Gagnon
- * GIT hub project page : Unidentified
+ * GIT hub project page : https://github.com/kagagnon/Responsive-Font/
  * 
- * Not compatibility tested yet
+ * Not compatibility tested yet (Work in IE8, firefox, chrome, safari...)
  * Post every compatibility error on the GIT project page
  */
 
@@ -13,7 +13,7 @@
 
 /*********************
 
-rf.value 			= 'px'; 	==> (string : Every CSS font-size proportie value) The size value the font will have.
+rf.value 		= 'px'; 	==> (string : Every CSS font-size proportie value) The size value the font will have.
 rf.throttle 		= false; 	==> (true|false) Performance option: calculate on window resize or X ms after the window resize is done
 rf.throttleDelay 	= 500;		==> (integer) [if throttle == true] Time before calculating the new size after window resize
 rf.override 		= false;	==> (true|false) If true, will add !important, else It will be base on CSS override
@@ -141,7 +141,8 @@ cssFile.isImportant(value)
 	}
 
 	//Bind the event
-	context.addEventListener('resize', utils.resize);
+	if(context.addEventListener) context.addEventListener('resize', utils.resize);
+	else context.attachEvent('onresize', utils.resize);
 	utils.resize.timer; //For throttle
 
 	//Set window variable and plugin shortcut.
@@ -190,8 +191,13 @@ cssFile.isImportant(value)
 
 		//Create and keep reference of <style> in DOM
 		this.styleTag = document.createElement('style');
-		this.styleTag.innerHTML = this.selector + '{}';
 		document.head.appendChild(this.styleTag);
+		this.styleTag.setAttribute('type', 'text/css');
+		try{
+			this.styleTag.innerHTML = this.selector + '{}';
+		}catch(error){
+			this.styleTag.styleSheet.cssText = this.selector + '{}';
+		}
 	}
 
 	cssFile.prototype = {
@@ -227,9 +233,9 @@ cssFile.isImportant(value)
 			}
 
 			//Sort in case broswer doesnt do it automaticly.
-			arrWidth = arrWidth.sort(function(a, b) {
+			arrWidth = arrWidth.sort(/*function(a, b) {
 				return a.value > b.value ? 1 : -1;
-			});
+			}*/);
 
 
 			for(var c = 0, l = arrWidth.length; c<l; c++){
@@ -240,12 +246,14 @@ cssFile.isImportant(value)
 				else break;
 			}
 
+
 			if(!minWidth && minWidth != 0){
 				minWidth = arrWidth[0] || 0;
 			}
 
+
 			if(this.watchPoint[minWidth] !== undefined){
-				if(maxWidth != undefined){
+				if(maxWidth !== undefined){
 					var lowerVal = this.watchPoint[minWidth],
 					higherVal = this.watchPoint[maxWidth],
 					cssVal =  (((mediaQueries - minWidth) / (maxWidth - minWidth)) * (higherVal - lowerVal)) + lowerVal,
@@ -254,8 +262,14 @@ cssFile.isImportant(value)
 					var css = 'font-size : '+ this.watchPoint[minWidth] + this.setValue + this.important + ';';
 				}
 
-				this.styleTag.innerHTML = this.styleTag.innerHTML.replace(/\{.*\}/, '{'+ css +'}');
+
+				try{
+					this.styleTag.innerHTML = this.styleTag.innerHTML.replace(/\{.*\}/, '{'+ css +'}');
+				}catch(error){
+					this.styleTag.styleSheet.cssText = this.styleTag.styleSheet.cssText.replace(/\{[\s\S]*\}/m, '{'+ css +'}');
+				}
 			}
+
 
 			return this
 		},
