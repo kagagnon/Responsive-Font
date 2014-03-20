@@ -234,8 +234,10 @@ cssFile.isImportant(value)
 
 			//Sort in case broswer doesnt do it automaticly.
 			arrWidth = arrWidth.sort(function(a, b) {
-				return a.value > b.value ? 1 : -1;
+				return +a > +b ? 1 : -1;
 			});
+
+			console.log(arrWidth);
 
 
 			for(var c = 0, l = arrWidth.length; c<l; c++){
