@@ -237,8 +237,6 @@ cssFile.isImportant(value)
 				return +a > +b ? 1 : -1;
 			});
 
-			console.log(arrWidth);
-
 
 			for(var c = 0, l = arrWidth.length; c<l; c++){
 				if(arrWidth[c] <= mediaQueries){
