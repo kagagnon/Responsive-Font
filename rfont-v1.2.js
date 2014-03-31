@@ -191,7 +191,7 @@ cssFile.isImportant(value)
 
 		//Create and keep reference of <style> in DOM
 		this.styleTag = document.createElement('style');
-		document.head.appendChild(this.styleTag);
+		document.getElementsByTagName('head')[0].appendChild(this.styleTag);
 		this.styleTag.setAttribute('type', 'text/css');
 		try{
 			this.styleTag.innerHTML = this.selector + '{}';
@@ -275,7 +275,7 @@ cssFile.isImportant(value)
 		},
 		remove : function(){
 			allObj.splice(allObj.indexOf(this), 1);
-			document.head.removeChild(this.styleTag);
+			document.getElementsByTagName('head')[0].removeChild(this.styleTag);
 		},
 		isImportant : function(isIt){
 			if(isIt === undefined || isIt){
