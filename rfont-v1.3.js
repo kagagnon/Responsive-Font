@@ -54,7 +54,7 @@ cssFile.changeSelector('selector')
 	==> Change the old selector by a new one
 	==> return cssFile
 
-cssFile.setQueryPoint({width : value[, width : value, ...]}, orientation)
+cssFile.setQueryPoint({width : value[, width : value, ...]}[, orientation])
 	==> width = (integer) the mediaqueries break point in px
 	==> value = (integer) the font size
 	==> orientation = (string) If mediaqueries should be based on width or height
