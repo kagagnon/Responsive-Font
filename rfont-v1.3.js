@@ -1,5 +1,5 @@
 /*!
- * Responsive Font - version 1.1 2014-02-07
+ * Responsive Font - version 1.3 2014-05-12
  * Follow me on twitter : https://twitter.com/gagnon_KA
  *
  * Copyright (c) 2013 Karl-André Gagnon
@@ -17,6 +17,7 @@ rf.value 		= 'px'; 	==> (string : Every CSS font-size proportie value) The size 
 rf.throttle 		= false; 	==> (true|false) Performance option: calculate on window resize or X ms after the window resize is done
 rf.throttleDelay 	= 500;		==> (integer) [if throttle == true] Time before calculating the new size after window resize
 rf.override 		= false;	==> (true|false) If true, will add !important, else It will be base on CSS override
+rf.mediaOrientation	= 'width';	==> ('width'|'height') If mediaqueries should be based on width or height
 
 Options can be changed manually like that:
 
@@ -53,9 +54,10 @@ cssFile.changeSelector('selector')
 	==> Change the old selector by a new one
 	==> return cssFile
 
-cssFile.setQueryPoint({width : value[, width : value, ...]})
+cssFile.setQueryPoint({width : value[, width : value, ...]}, orientation)
 	==> width = (integer) the mediaqueries break point in px
 	==> value = (integer) the font size
+	==> orientation = (string) If mediaqueries should be based on width or height
 	==> Create your query points and set your font size
 	==> return cssFile
 
@@ -157,6 +159,7 @@ cssFile.isImportant(value)
 	rf.throttle = false;
 	rf.throttleDelay = 500;
 	rf.override = false;
+	rf.mediaOrientation = 'width';
 
 	//Some prefer an other method to modify options
 	//rf.options({optionName : optionValue})
@@ -187,6 +190,7 @@ cssFile.isImportant(value)
 		this.selector = selector;
 		this.watchPoint = {};
 		this.setValue = rf.value;
+		this.mediaOrientation = rf.mediaOrientation;
 		this.important = rf.override ? '!important' : '';
 
 		//Create and keep reference of <style> in DOM
@@ -206,11 +210,12 @@ cssFile.isImportant(value)
 			this.selector = newSelector;
 			this.styleTag.innerHTML = this.styleTag.innerHTML.replace(/.*\{/, this.selector + '{')
 		},
-		setQueryPoint : function(queries){
+		setQueryPoint : function(queries, orientation){
 			for(x in queries){
 				this.watchPoint[x] = queries[x];
 			}
 
+			this.mediaOrientation = orientation || rf.mediaOrientation;
 
 			return this.update()
 		},
@@ -223,7 +228,7 @@ cssFile.isImportant(value)
 			}
 		},
 		update : function(){
-			var mediaQueries = utils.viewport().width,
+			var mediaQueries = (this.mediaOrientation.toLowerCase() === 'height' ? utils.viewport().height : utils.viewport().width),
 			arrWidth = [],
 			minWidth,
 			maxWidth;
