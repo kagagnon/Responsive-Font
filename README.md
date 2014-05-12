@@ -50,7 +50,7 @@ If you ever use it in a production site, feel free to let me know the URL and I 
 	rf.throttle 		= false; 	==> (true|false) Performance option: calculate on window resize or X ms after the window resize is done
 	rf.throttleDelay 	= 500;		==> (integer) [if throttle == true] Time before calculating the new size after window resize
 	rf.override 		= false;	==> (true|false) If true, will add !important, else It will be based on CSS override
-        rf.mediaOrientation	= 'width';	==> ('width'|'height') If mediaqueries should be based on width or height
+	rf.mediaOrientation	= 'width';	==> ('width'|'height') If mediaqueries should be based on width or height
 
 	Options can be changed manually like that:
 
