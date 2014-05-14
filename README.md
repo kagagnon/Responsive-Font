@@ -3,6 +3,21 @@ Responsive-Font
 
 Calculate font-size depending on the window size.
 
+##New in v1.4
+
+You can now create a font-size based on the width **and** height of the window. The calculation is simple. it is the middle point between the font size it should be based on the width and the font-size it should be based on the height.
+
+For example, if you set queries point on the width like this : `{1500 : 60, 500 : 30}` and on the height like this : `{600 : 15, 2000 : 80}` and the screen size is `1000 x  1500`, the current font size will be
+
+    //Width calculation
+    (((1000 - 500) / (1500 - 500)) * (60 - 30)) + 30 = 45;
+    
+    //Height calculation
+    (((1500 - 600) / (2000 - 600)) * (80 - 15)) + 15 = 57; //(rounded)
+    
+    //Final font size
+    (45 + 57) / 2 = 51;
+
 ##What it does
 
 Responsive font is a common problem for web designer.  Having the font size to adapt the screen without using multiple media queries is nearly impossible, not without JavaScript. This plugin will adapt the font based on the different points/sizes you will set. 
