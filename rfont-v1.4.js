@@ -54,7 +54,7 @@ cssFile.changeSelector('selector')
 	==> Change the old selector by a new one
 	==> return cssFile
 
-cssFile.setQueryPoint({width : value[, width : value, ...]}[, orientation])
+cssFile.setQueryPoint({width : value[, width : value, ...]}, orientation)
 	==> width = (integer) the mediaqueries break point in px
 	==> value = (integer) the font size
 	==> orientation = (string) If mediaqueries should be based on width or height
@@ -188,7 +188,7 @@ cssFile.isImportant(value)
 		//All single object setting
 		//Default setting are those set by the user
 		this.selector = selector;
-		this.watchPoint = {};
+		this.watchPoint = {width : {}, height : {}};
 		this.setValue = rf.value;
 		this.mediaOrientation = rf.mediaOrientation;
 		this.important = rf.override ? '!important' : '';
@@ -211,16 +211,22 @@ cssFile.isImportant(value)
 			this.styleTag.innerHTML = this.styleTag.innerHTML.replace(/.*\{/, this.selector + '{')
 		},
 		setQueryPoint : function(queries, orientation){
-			for(x in queries){
-				this.watchPoint[x] = queries[x];
-			}
 
-			this.mediaOrientation = orientation || rf.mediaOrientation;
+			if(typeof orientation !== 'string') orientation = '';
+
+			orientation = orientation.toLowerCase() === "height" ? "height" :
+				orientation.toLowerCase() === "width" ? "width" : null;
+
+			if(orientation === null) orientation = this.mediaOrientation.match(/^(width|height)$/g).length ? this.mediaOrientation.toLowerCase() : "width";
+
+			for(x in queries){
+				this.watchPoint[orientation][x] = queries[x];
+			}
 
 			return this.update()
 		},
 		fontValue : function(value){
-			if(value === undefined){
+			if(typeof value === 'undefined'){
 				return this.setValue;
 			}else{
 				this.setValue = value;
@@ -228,13 +234,20 @@ cssFile.isImportant(value)
 			}
 		},
 		update : function(){
-			var mediaQueries = (this.mediaOrientation.toLowerCase() === 'height' ? utils.viewport().height : utils.viewport().width),
+			var mediaQueries = utils.viewport(),
 			arrWidth = [],
+			arrHeight = [],
 			minWidth,
-			maxWidth;
+			maxWidth,
+			minHeight,
+			maxHeight;
 
-			for(x in this.watchPoint){
+			for(x in this.watchPoint.width){
 				arrWidth.push(x);
+			}
+
+			for(x in this.watchPoint.height){
+				arrHeight.push(x);
 			}
 
 			//Sort in case broswer doesnt do it automaticly.
@@ -242,37 +255,76 @@ cssFile.isImportant(value)
 				return +a > +b ? 1 : -1;
 			});
 
+			//Sort in case broswer doesnt do it automaticly.
+			arrHeight = arrHeight.sort(function(a, b) {
+				return +a > +b ? 1 : -1;
+			});
 
-			for(var c = 0, l = arrWidth.length; c<l; c++){
-				if(arrWidth[c] <= mediaQueries){
-					minWidth = arrWidth[c];
-					maxWidth = arrWidth[c+1];
+			//Check if there is a query set on the width
+			if(arrWidth.length > 0){
+
+				for(var c = 0, l = arrWidth.length; c<l; c++){
+					if(arrWidth[c] <= mediaQueries.width){
+						minWidth = arrWidth[c];
+						maxWidth = arrWidth[c+1];
+					}
+					else break;
 				}
-				else break;
+
+
+				if(!minWidth && minWidth != 0){
+					minWidth = arrWidth[0] || 0;
+				}
+
+
+				if(typeof this.watchPoint.width[minWidth] !== 'undefined'){
+					if(typeof maxWidth !== 'undefined'){
+						var lowerVal = this.watchPoint.width[minWidth],
+						higherVal = this.watchPoint.width[maxWidth],
+						widthValue =  (((mediaQueries.width - minWidth) / (maxWidth - minWidth)) * (higherVal - lowerVal)) + lowerVal;
+					}else{
+						var widthValue = this.watchPoint.width[minWidth];
+					}
+				}
 			}
 
+			//Check if there is a query set on the height
+			if(arrHeight.length > 0){
 
-			if(!minWidth && minWidth != 0){
-				minWidth = arrWidth[0] || 0;
+				for(var i = 0, l = arrHeight.length; i<l; i++){
+					if(arrHeight[i] <= mediaQueries.height){
+						minHeight = arrHeight[i];
+						maxHeight = arrHeight[i+1];
+					}
+					else break;
+				}
+
+
+				if(!minHeight && minHeight != 0){
+					minHeight = arrHeight[0] || 0;
+				}
+
+
+				if(typeof this.watchPoint.height[minHeight] !== 'undefined'){
+					if(typeof maxHeight !== 'undefined'){
+						var lowerVal = this.watchPoint.height[minHeight],
+						higherVal = this.watchPoint.height[maxHeight],
+						heightValue =  (((mediaQueries.height - minHeight) / (maxHeight - minHeight)) * (higherVal - lowerVal)) + lowerVal;
+					}else{
+						var heightValue = this.watchPoint.height[minHeight];
+					}
+				}
 			}
 
+			//Obfuscation
+			var factor = +!!widthValue + +!!heightValue;
 
-			if(this.watchPoint[minWidth] !== undefined){
-				if(maxWidth !== undefined){
-					var lowerVal = this.watchPoint[minWidth],
-					higherVal = this.watchPoint[maxWidth],
-					cssVal =  (((mediaQueries - minWidth) / (maxWidth - minWidth)) * (higherVal - lowerVal)) + lowerVal,
-					css = 'font-size : '+ cssVal + this.setValue + this.important + ';';
-				}else{
-					var css = 'font-size : '+ this.watchPoint[minWidth] + this.setValue + this.important + ';';
-				}
+			var css = 'font-size : ' + (((widthValue || 0) + (heightValue || 0)) / factor) + this.setValue + this.important;
 
-
-				try{
-					this.styleTag.innerHTML = this.styleTag.innerHTML.replace(/\{.*\}/, '{'+ css +'}');
-				}catch(error){
-					this.styleTag.styleSheet.cssText = this.styleTag.styleSheet.cssText.replace(/\{[\s\S]*\}/m, '{'+ css +'}');
-				}
+			try{
+				this.styleTag.innerHTML = this.styleTag.innerHTML.replace(/\{.*\}/, '{'+ css +'}');
+			}catch(error){
+				this.styleTag.styleSheet.cssText = this.styleTag.styleSheet.cssText.replace(/\{[\s\S]*\}/m, '{'+ css +'}');
 			}
 
 
